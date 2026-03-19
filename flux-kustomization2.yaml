@@ -1,0 +1,27 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: my-git-repository
+  namespace: flux-system
+spec:
+  interval: 1m
+  url: https://github.com/bmagic/fluxbugdemo
+  ref:
+    branch: main
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: flux-kustomization2
+  namespace: flux-system
+spec:
+  interval: 1m
+  sourceRef:
+    kind: GitRepository
+    name: my-git-repository
+  path: /test2/base
+  components:
+    - ../components/foo
+  prune: true
+  wait: true
+---
